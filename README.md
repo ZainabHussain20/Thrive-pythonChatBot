@@ -1,4 +1,4 @@
-# Thrive-BackEnd
+# Thrive-Python
 
 ## Date: 07/04/2024
 
