@@ -9,32 +9,8 @@
         "tag": "goodbye",
         "patterns": ["Bye", "Goodbye", "See you later" , "Thank you for your help", "Thank you"],
         "responses": ["Goodbye!", "See you later!", "Bye!", "Welcome ! see you later "]
-      },
-      {
-        "tag": "goodbye",
-        "patterns": ["Bye", "Goodbye", "See you later"],
-        "responses": ["Goodbye!", "See you later!", "Bye!"]
-      },
-      {
-        "tag": "goodbye",
-        "patterns": ["Bye", "Goodbye", "See you later"],
-        "responses": ["Goodbye!", "See you later!", "Bye!"]
-      },
-      {
-        "tag": "goodbye",
-        "patterns": ["Bye", "Goodbye", "See you later"],
-        "responses": ["Goodbye!", "See you later!", "Bye!"]
-      },
-      {
-        "tag": "goodbye",
-        "patterns": ["Bye", "Goodbye", "See you later"],
-        "responses": ["Goodbye!", "See you later!", "Bye!"]
-      },
-      {
-        "tag": "goodbye",
-        "patterns": ["Bye", "Goodbye", "See you later"],
-        "responses": ["Goodbye!", "See you later!", "Bye!"]
       }
+      
     ]
   }
   
