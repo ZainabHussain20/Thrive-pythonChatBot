@@ -6,6 +6,11 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 from nltk.stem import WordNetLemmatizer
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.linear_model import LogisticRegression
+from dotenv import load_dotenv
+import os
+
+# Load environment variables from .env file
+load_dotenv()
 
 # Download NLTK resources if not already downloaded
 nltk.download('punkt')
@@ -54,9 +59,10 @@ def get_response(intent):
             return response_text, response_buttons
     return "I'm not sure how to respond to that.", []
 
-# MongoDB client setup
-client = pymongo.MongoClient("mongodb://localhost:27017/")
-db = client['your_database_name']
+# MongoDB client setup using environment variable
+mongo_uri = os.getenv('MONGO_URI')
+client = pymongo.MongoClient(mongo_uri)
+db = client.get_default_database()
 programs_collection = db['programs']
 
 class ChatbotHandler(BaseHTTPRequestHandler):
@@ -71,15 +77,24 @@ class ChatbotHandler(BaseHTTPRequestHandler):
         else:
             # Predict intent
             intent = predict_class(message)
+            print(f"Predicted intent: {intent}")  # Debug statement
             response_text, response_buttons = get_response(intent)
 
             # Handle specific intents and include buttons
             if intent == "program_list":
+                print("Retrieving programs from database...")  # Debug statement
                 programs = programs_collection.find({}, {"_id": 0, "name": 1})
                 program_names = [program["name"] for program in programs]
+                print(f"Programs retrieved: {program_names}")  # Debug statement
                 response = {
                     "text": "Here are our programs:",
                     "buttons": program_names
+                }
+            elif intent == "yes_response" or message.lower() in ["yes", "sure", "okay"]:
+                print("Handling 'Yes' response, redirecting to main menu.")  # Debug statement
+                response = {
+                    "text": "Going back to the main menu.",
+                    "buttons": ["About us", "Program list", "Contact"]
                 }
             else:
                 response = {

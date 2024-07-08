@@ -4,55 +4,59 @@
       "tag": "greeting",
       "patterns": ["Hi", "Hello", "Hey"],
       "responses": ["Hello!", "Hi there!", "Greetings!", "Welcome back"],
-      "buttons": ["About Us", "Program List", "Contact"]
+      "buttons": ["About us", "Program list", "Contact"]
     },
     {
       "tag": "goodbye",
       "patterns": ["Bye", "Goodbye", "See you later", "Thank you for your help", "Thank you"],
-      "responses": ["Goodbye!", "See you later!", "Bye!", "Welcome! See you later"],
-      "buttons": []
+      "responses": ["Goodbye!", "See you later!", "Bye!", "Welcome! See you later"]
     },
     {
       "tag": "main_menu",
-      "patterns": ["menu", "options", "what can you do"],
-      "responses": ["Choose an option:"],
-      "buttons": ["About Us", "Program List", "Contact"]
+      "patterns": ["Main menu", "Menu"],
+      "responses": ["What would you like to know?"],
+      "buttons": ["About us", "Program list", "Contact"]
     },
     {
       "tag": "about_us",
-      "patterns": ["about us", "information"],
-      "responses": ["Choose an option:"],
-      "buttons": ["About Thrive", "Location", "Service Hours"]
+      "patterns": ["About us", "Tell me about you", "Who are you"],
+      "responses": ["What would you like to know about us?"],
+      "buttons": ["About Thrive", "Location", "Service hours"]
     },
     {
       "tag": "about_thrive",
-      "patterns": ["About Thrive"],
-      "responses": ["Thrive is a platform dedicated to... Do you have another question?"],
+      "patterns": ["About Thrive", "Thrive"],
+      "responses": ["Thrive is a company dedicated to providing high-quality educational programs. Do you have another question?"],
       "buttons": ["Yes", "No"]
     },
     {
       "tag": "location",
-      "patterns": ["location", "where are you"],
+      "patterns": ["Location", "Where are you located?"],
       "responses": ["We are located in Bahrain, Manama. Do you have more questions?"],
       "buttons": ["Yes", "No"]
     },
     {
       "tag": "service_hours",
-      "patterns": ["service hours", "working hours"],
-      "responses": ["Our service hours are Sunday to Thursday, 8:00 AM to 3:30 PM. Do you have more questions?"],
+      "patterns": ["Service hours", "When are you open?"],
+      "responses": ["Our Service hours are Sunday to Thursday, 8:00 AM to 3:30 PM. Do you have more questions?"],
       "buttons": ["Yes", "No"]
     },
     {
       "tag": "program_list",
-      "patterns": ["program list", "courses"],
-      "responses": ["Fetching the list of programs..."],
-      "buttons": []
+      "patterns": ["Program list", "List programs", "Programs"],
+      "responses": ["Here are our programs:"]
     },
     {
       "tag": "contact",
-      "patterns": ["contact", "call"],
-      "responses": ["You can reach us at 33454678 for further assistance."],
-      "buttons": []
+      "patterns": ["Contact", "How to contact"],
+      "responses": ["You can reach us at 33454678 for further assistance. Do you have more questions?"],
+      "buttons": ["Yes", "No"]
+    },
+    {
+      "tag": "yes_response",
+      "patterns": ["Yes", "Sure", "Okay"],
+      "responses": ["Going back to the main menu."],
+      "buttons": ["About us", "Program list", "Contact"]
     }
   ]
 }
