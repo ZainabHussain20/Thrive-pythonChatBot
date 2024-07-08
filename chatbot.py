@@ -1,6 +1,7 @@
 import json
 import nltk
-import sys
+import random
+import pymongo
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from nltk.stem import WordNetLemmatizer
 from sklearn.feature_extraction.text import CountVectorizer
@@ -13,11 +14,11 @@ nltk.download('wordnet')
 # Initialize NLTK lemmatizer
 lemmatizer = WordNetLemmatizer()
 
-# Load intents from JSON file (intents.json should be structured correctly)
+# Load intents from JSON file
 with open('intents.json') as file:
     intents = json.load(file)
 
-# Prepare training data (assuming you've trained your model and have it ready)
+# Prepare training data
 sentences = []
 labels = []
 classes = []
@@ -44,21 +45,53 @@ def predict_class(sentence):
     prediction = model.predict(X_test)
     return prediction[0]
 
+# Function to get a random response from the intent
+def get_response(intent):
+    for intent_data in intents['intents']:
+        if intent_data['tag'] == intent:
+            response_text = random.choice(intent_data['responses'])
+            response_buttons = intent_data.get('buttons', [])
+            return response_text, response_buttons
+    return "I'm not sure how to respond to that.", []
+
+# MongoDB client setup
+client = pymongo.MongoClient("mongodb://localhost:27017/")
+db = client['your_database_name']
+programs_collection = db['programs']
+
 class ChatbotHandler(BaseHTTPRequestHandler):
     def do_POST(self):
         content_length = int(self.headers['Content-Length'])
         post_data = self.rfile.read(content_length)
         json_data = json.loads(post_data.decode('utf-8'))
-        message = json_data['message']
+        message = json_data.get('message', None)
 
-        # Predict intent
-        intent = predict_class(message)
+        if not message:
+            response = {"text": "Invalid input. Please provide a message.", "buttons": []}
+        else:
+            # Predict intent
+            intent = predict_class(message)
+            response_text, response_buttons = get_response(intent)
+
+            # Handle specific intents and include buttons
+            if intent == "program_list":
+                programs = programs_collection.find({}, {"_id": 0, "name": 1})
+                program_names = [program["name"] for program in programs]
+                response = {
+                    "text": "Here are our programs:",
+                    "buttons": program_names
+                }
+            else:
+                response = {
+                    "text": response_text,
+                    "buttons": response_buttons
+                }
 
         # Send response
         self.send_response(200)
         self.send_header('Content-type', 'application/json')
         self.end_headers()
-        self.wfile.write(json.dumps({'intent': intent}).encode('utf-8'))
+        self.wfile.write(json.dumps({'response': response}).encode('utf-8'))
 
     def do_GET(self):
         self.send_response(200)
