@@ -26,7 +26,7 @@
     {
       "tag": "about_thrive",
       "patterns": ["About Thrive", "Thrive"],
-      "responses": ["Thrive is a company dedicated to providing high-quality educational programs. Do you have another question?"],
+      "responses": ["A site that includes programming educational programs, through which the user can register for more than one program and pay to attend this program. Through the site, the admin can accept or reject users in the programs in which the user tried to register. The admin can also add programs and modify them. Do you have another question?"],
       "buttons": ["Yes", "No"]
     },
     {
@@ -57,6 +57,17 @@
       "patterns": ["Yes", "Sure", "Okay"],
       "responses": ["Going back to the main menu."],
       "buttons": ["About us", "Program list", "Contact"]
+    },
+    {
+      "tag": "no_response",
+      "patterns": ["No", "No thanks"],
+      "responses": ["Okay, feel free to ask if you have more questions later. Goodbye!"]
+    },
+    {
+      "tag": "program_details",
+      "patterns": ["Tell me about the program"],
+      "responses": ["What do you want to know about this program?"],
+      "buttons": ["Time", "Start date", "End date", "Description", "Gender", "Location", "Reviews"]
     }
   ]
 }

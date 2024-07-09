@@ -65,8 +65,12 @@ client = pymongo.MongoClient(mongo_uri)
 db = client.get_default_database()
 programs_collection = db['programs']
 
+selected_program = None  # Variable to store the selected program
+
 class ChatbotHandler(BaseHTTPRequestHandler):
     def do_POST(self):
+        global selected_program
+
         content_length = int(self.headers['Content-Length'])
         post_data = self.rfile.read(content_length)
         json_data = json.loads(post_data.decode('utf-8'))
@@ -90,8 +94,36 @@ class ChatbotHandler(BaseHTTPRequestHandler):
                     "text": "Here are our programs:",
                     "buttons": program_names
                 }
+            elif intent == "program_details" or message in [program["name"] for program in programs_collection.find({}, {"_id": 0, "name": 1})]:
+                if selected_program is None:
+                    selected_program = message
+                response = {
+                    "text": "What do you want to know about this program?",
+                    "buttons": ["Time", "Start date", "End date", "Description", "Gender", "Location", "Reviews"]
+                }
+            elif message in ["Time", "Start date", "End date", "Description", "Gender", "Location", "Reviews"] and selected_program:
+                program = programs_collection.find_one({"name": selected_program})
+                if message == "Time":
+                    response_text = f"The program time is {', '.join(program['time'])}."
+                elif message == "Start date":
+                    response_text = f"The program starts on {program['start']}."
+                elif message == "End date":
+                    response_text = f"The program ends on {program['end']}."
+                elif message == "Description":
+                    response_text = f"Description: {program['description']}"
+                elif message == "Gender":
+                    response_text = f"Gender: {program['gender']}"
+                elif message == "Location":
+                    response_text = f"Location: {program['location']}"
+                elif message == "Reviews":
+                    response_text = f"Reviews: {program['reviews']}"
+                
+                response = {
+                    "text": response_text,
+                    "buttons": ["Time", "Start date", "End date", "Description", "Gender", "Location", "Reviews"]
+                }
             elif intent == "yes_response" or message.lower() in ["yes", "sure", "okay"]:
-                print("Handling 'Yes' response, redirecting to main menu.")  # Debug statement
+                selected_program = None
                 response = {
                     "text": "Going back to the main menu.",
                     "buttons": ["About us", "Program list", "Contact"]
