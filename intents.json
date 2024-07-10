@@ -67,7 +67,19 @@
       "tag": "program_details",
       "patterns": ["Tell me about the program"],
       "responses": ["What do you want to know about this program?"],
-      "buttons": ["Time", "Start date", "End date", "Description", "Gender", "Location", "Reviews"]
+      "buttons": ["Time", "Start date", "End date", "Description", "Gender", "Location", "Reviews" , "Registration" , "End Conversation"]
+    },
+    {
+      "tag": "registration",
+      "patterns": ["Register", "Registration", "Sign up", "Enroll"],
+      "responses": ["Redirecting you to the registration page..."],
+      "buttons": []
+    },
+    {
+      "tag": "end_conversation",
+      "patterns": ["End conversation", "Review"],
+      "responses": ["Please take a moment to review your chat experience."],
+      "buttons": []
     }
   ]
 }
