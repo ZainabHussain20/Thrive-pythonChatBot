@@ -8,6 +8,7 @@ from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.linear_model import LogisticRegression
 from dotenv import load_dotenv
 import os
+import html
 
 # Load environment variables from .env file
 load_dotenv()
@@ -56,6 +57,15 @@ def get_response(intent):
         if intent_data['tag'] == intent:
             response_text = random.choice(intent_data['responses'])
             response_buttons = intent_data.get('buttons', [])
+
+            # Generate registration link if it's a registration intent
+            if intent == "register_program":
+                program_name = selected_program
+                program = programs_collection.find_one({"name": program_name})
+                program_id = str(program["_id"])
+                registration_link = f"http://127.0.0.1:5173/program/{program_id}"
+                response_text = response_text.format(programName=program_name, registrationLink=registration_link)
+            
             return response_text, response_buttons
     return "I'm not sure how to respond to that.", []
 
@@ -66,6 +76,23 @@ db = client.get_default_database()
 programs_collection = db['programs']
 
 selected_program = None  # Variable to store the selected program
+
+# Function to retrieve program details based on user message
+def get_program_detail(message, program):
+    if message == "Time":
+        return f"The program time is {', '.join(program.get('time', []))}."
+    elif message == "Start date":
+        return f"The program starts on {program.get('start', 'N/A')}."
+    elif message == "End date":
+        return f"The program ends on {program.get('end', 'N/A')}."
+    elif message == "Description":
+        return f"Description: {program.get('description', 'N/A')}"
+    elif message == "Gender":
+        return f"Gender: {program.get('gender', 'N/A')}"
+    elif message == "Location":
+        return f"Location: {program.get('location', 'N/A')}"
+    elif message == "Reviews":
+        return f"Reviews: {program.get('reviews', 'N/A')}"
 
 class ChatbotHandler(BaseHTTPRequestHandler):
     def do_POST(self):
@@ -87,41 +114,40 @@ class ChatbotHandler(BaseHTTPRequestHandler):
             # Handle specific intents and include buttons
             if intent == "program_list":
                 print("Retrieving programs from database...")  # Debug statement
-                programs = programs_collection.find({}, {"_id": 0, "name": 1})
+                programs = programs_collection.find({}, {"_id": 1, "name": 1})
                 program_names = [program["name"] for program in programs]
                 print(f"Programs retrieved: {program_names}")  # Debug statement
                 response = {
                     "text": "Here are our programs:",
                     "buttons": program_names
                 }
-            elif intent == "program_details" or message in [program["name"] for program in programs_collection.find({}, {"_id": 0, "name": 1})]:
+            elif intent == "program_details" or message in [program["name"] for program in programs_collection.find({}, {"_id": 1, "name": 1})]:
                 if selected_program is None:
                     selected_program = message
                 response = {
                     "text": "What do you want to know about this program?",
-                    "buttons": ["Time", "Start date", "End date", "Description", "Gender", "Location", "Reviews"]
+                    "buttons": ["Time", "Start date", "End date", "Description", "Gender", "Location", "Reviews", "Registration", "End Conversation"]
                 }
             elif message in ["Time", "Start date", "End date", "Description", "Gender", "Location", "Reviews"] and selected_program:
                 program = programs_collection.find_one({"name": selected_program})
-                if message == "Time":
-                    response_text = f"The program time is {', '.join(program['time'])}."
-                elif message == "Start date":
-                    response_text = f"The program starts on {program['start']}."
-                elif message == "End date":
-                    response_text = f"The program ends on {program['end']}."
-                elif message == "Description":
-                    response_text = f"Description: {program['description']}"
-                elif message == "Gender":
-                    response_text = f"Gender: {program['gender']}"
-                elif message == "Location":
-                    response_text = f"Location: {program['location']}"
-                elif message == "Reviews":
-                    response_text = f"Reviews: {program['reviews']}"
-                
+                response_text = get_program_detail(message, program)
                 response = {
                     "text": response_text,
-                    "buttons": ["Time", "Start date", "End date", "Description", "Gender", "Location", "Reviews"]
+                    "buttons": ["Time", "Start date", "End date", "Description", "Gender", "Location", "Reviews", "Registration", "End Conversation"]
                 }
+            elif message == "Registration" and selected_program:
+                program = programs_collection.find_one({"name": selected_program})
+                program_id = str(program["_id"])
+                response = {
+                    "text": f"To register for {selected_program}, please visit: <a href='http://127.0.0.1:5173/program/{program_id}' target='_blank'>Program Detail</a>",
+                    "buttons": ["Time", "Start date", "End date", "Description", "Gender", "Location", "Reviews", "End Conversation"]
+                }
+            elif message == "End Conversation":
+                response = {
+                    "text": "Please take a moment to review your chat experience.",
+                    "buttons": []
+                }
+                selected_program = None  # Reset selected program
             elif intent == "yes_response" or message.lower() in ["yes", "sure", "okay"]:
                 selected_program = None
                 response = {

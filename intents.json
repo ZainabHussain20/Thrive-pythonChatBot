@@ -37,20 +37,79 @@
     },
     {
       "tag": "service_hours",
-      "patterns": ["Service hours", "When are you open?"],
-      "responses": ["Our Service hours are Sunday to Thursday, 8:00 AM to 3:30 PM. Do you have more questions?"],
+      "patterns": ["What are your service hours?", "Service hours"],
+      "responses": ["We are available 24/7. Do you have more questions?"],
       "buttons": ["Yes", "No"]
     },
     {
       "tag": "program_list",
-      "patterns": ["Program list", "List programs", "Programs"],
+      "patterns": ["What programs do you offer?", "List of programs", "Programs", "Show me your programs"],
       "responses": ["Here are our programs:"]
     },
     {
-      "tag": "contact",
-      "patterns": ["Contact", "How to contact"],
-      "responses": ["You can reach us at 33454678 for further assistance. Do you have more questions?"],
-      "buttons": ["Yes", "No"]
+      "tag": "program_details",
+      "patterns": ["Tell me more about this program", "Program details", "More details about this program"],
+      "responses": ["What do you want to know about this program?"],
+      "buttons": ["Time", "Start date", "End date", "Description", "Gender", "Location", "Reviews", "Registration", "End Conversation"]
+    },
+    {
+      "tag": "register_program",
+      "patterns": ["Register for program {programName}", "Sign up for program {programName}"],
+      "responses": ["To register for {programName}, please visit: {registrationLink}"]
+    },
+    {
+      "tag": "time",
+      "patterns": ["Time", "When is the program?", "Program time"],
+      "responses": ["The program time is:"],
+      "buttons": ["Time", "Start date", "End date", "Description", "Gender", "Location", "Reviews", "Registration", "End Conversation"]
+    },
+    {
+      "tag": "start_date",
+      "patterns": ["Start date", "When does the program start?", "Program start date"],
+      "responses": ["The program starts on:"],
+      "buttons": ["Time", "Start date", "End date", "Description", "Gender", "Location", "Reviews", "Registration", "End Conversation"]
+    },
+    {
+      "tag": "end_date",
+      "patterns": ["End date", "When does the program end?", "Program end date"],
+      "responses": ["The program ends on:"],
+      "buttons": ["Time", "Start date", "End date", "Description", "Gender", "Location", "Reviews", "Registration", "End Conversation"]
+    },
+    {
+      "tag": "description",
+      "patterns": ["Description", "Tell me about the program", "Program description"],
+      "responses": ["Description:"],
+      "buttons": ["Time", "Start date", "End date", "Description", "Gender", "Location", "Reviews", "Registration", "End Conversation"]
+    },
+    {
+      "tag": "gender",
+      "patterns": ["Gender", "Who can attend?", "Program gender"],
+      "responses": ["Gender:"],
+      "buttons": ["Time", "Start date", "End date", "Description", "Gender", "Location", "Reviews", "Registration", "End Conversation"]
+    },
+    {
+      "tag": "location",
+      "patterns": ["Location", "Where is the program?", "Program location"],
+      "responses": ["Location:"],
+      "buttons": ["Time", "Start date", "End date", "Description", "Gender", "Location", "Reviews", "Registration", "End Conversation"]
+    },
+    {
+      "tag": "reviews",
+      "patterns": ["Reviews", "What do people say about this program?", "Program reviews"],
+      "responses": ["Reviews:"],
+      "buttons": ["Time", "Start date", "End date", "Description", "Gender", "Location", "Reviews", "Registration", "End Conversation"]
+    },
+    {
+      "tag": "registration",
+      "patterns": ["Registration", "How can I register?", "Register for this program"],
+      "responses": ["To register for this program, please visit: "],
+      "buttons": ["Time", "Start date", "End date", "Description", "Gender", "Location", "Reviews", "End Conversation"]
+    },
+    {
+      "tag": "end_conversation",
+      "patterns": ["End conversation", "That's all", "Thank you, I'm done"],
+      "responses": ["Please take a moment to review your chat experience."],
+      "buttons": []
     },
     {
       "tag": "yes_response",
@@ -59,27 +118,15 @@
       "buttons": ["About us", "Program list", "Contact"]
     },
     {
-      "tag": "no_response",
-      "patterns": ["No", "No thanks"],
-      "responses": ["Okay, feel free to ask if you have more questions later. Goodbye!"]
-    },
-    {
-      "tag": "program_details",
-      "patterns": ["Tell me about the program"],
-      "responses": ["What do you want to know about this program?"],
-      "buttons": ["Time", "Start date", "End date", "Description", "Gender", "Location", "Reviews" , "Registration" , "End Conversation"]
-    },
-    {
-      "tag": "registration",
-      "patterns": ["Register", "Registration", "Sign up", "Enroll"],
-      "responses": ["Redirecting you to the registration page..."],
-      "buttons": []
-    },
-    {
-      "tag": "end_conversation",
-      "patterns": ["End conversation", "Review"],
-      "responses": ["Please take a moment to review your chat experience."],
-      "buttons": []
+      "tag": "get_program_details",
+      "patterns": [
+        "Tell me about program {programId}",
+        "Details for program {programId}",
+        "Program {programId} info"
+      ],
+      "responses": [
+        "Here are the details for program {programId}: {programDetails}. Click here to register: {registrationLink}"
+      ]
     }
   ]
 }
