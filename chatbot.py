@@ -1,3 +1,4 @@
+#import packages 
 import json
 import nltk
 import random
@@ -20,14 +21,15 @@ nltk.download('wordnet')
 # Initialize NLTK lemmatizer
 lemmatizer = WordNetLemmatizer()
 
-# Load intents from JSON file
+# Load intents from JSON file 
 with open('intents.json') as file:
     intents = json.load(file)
 
-# Prepare training data
+# Prepare training data (sentences and lables extracted from intents)
 sentences = []
 labels = []
 classes = []
+#chat bot logic 
 
 for intent in intents['intents']:
     for pattern in intent['patterns']:
@@ -69,13 +71,14 @@ def get_response(intent):
             return response_text, response_buttons
     return "I'm not sure how to respond to that.", []
 
-# MongoDB client setup using environment variable
+# retrieve data from mongoose DB
 mongo_uri = os.getenv('MONGO_URI')
 client = pymongo.MongoClient(mongo_uri)
 db = client.get_default_database()
 programs_collection = db['programs']
 
-selected_program = None  # Variable to store the selected program
+#stored selected program 
+selected_program = None  
 
 # Function to retrieve program details based on user message
 def get_program_detail(message, program):
@@ -94,6 +97,8 @@ def get_program_detail(message, program):
     elif message == "Reviews":
         return f"Reviews: {program.get('reviews', 'N/A')}"
 
+
+#handle http req
 class ChatbotHandler(BaseHTTPRequestHandler):
     def do_POST(self):
         global selected_program
